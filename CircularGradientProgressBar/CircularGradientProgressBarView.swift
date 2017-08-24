@@ -26,14 +26,11 @@ open class CircularGradientProgressBarView: UIView {
     }
     
     private func commonInit() {
-        // can be any color really, but for some reason we do need to set something to not have it stuck to black
-        self.backgroundColor = .clear
+        backgroundColor = .clear
         
         layer.contentsScale = UIScreen.main.scale
         layer.drawsAsynchronously = true
         layer.needsDisplayOnBoundsChange = true
         layer.setNeedsDisplay()
-        
-        gradient.setupMask()
     }
 }

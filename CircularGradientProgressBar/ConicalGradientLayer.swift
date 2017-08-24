@@ -35,8 +35,8 @@ open class ConicalGradientLayer: CALayer {
     
     // MARK: - Types
     
-    private struct Constants {
-        static let MaxAngle = 2 * M_PI
+    public struct Constants {
+        static let MaxAngle = 2.0 * .pi
         static let MaxHue = 255.0
     }
     
@@ -102,13 +102,13 @@ open class ConicalGradientLayer: CALayer {
     
     // MARK: - Helpers
     
-    private func draw(in rect: CGRect) {
+    public func draw(in rect: CGRect) {
         loadTransitions()
         
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let longerSide = max(rect.width, rect.height)
-        let radius = Double(longerSide) * M_SQRT2
-        let step = M_PI_2 / radius
+        let radius = Double(longerSide) * 2.squareRoot()
+        let step = .pi/2 / radius
         var angle = startAngle
         
         while angle <= endAngle {
@@ -127,21 +127,23 @@ open class ConicalGradientLayer: CALayer {
         }
     }
     
-    private func color(forAngle angle: Double) -> UIColor {
+    public func color(forAngle angle: Double) -> UIColor {
         let percent = angle.convert(fromZeroToMax: Constants.MaxAngle, toZeroToMax: 1.0)
         
-        guard let transition = transition(forPercent: percent)
-            else { return spectrumColor(forAngle: angle) }
+        guard let transition = transition(forPercent: percent) else {
+            return spectrumColor(forAngle: angle)
+        }
         
         return transition.color(forPercent: percent)
     }
+
     
     private func spectrumColor(forAngle angle: Double) -> UIColor {
         let hue = angle.convert(fromZeroToMax: Constants.MaxAngle, toZeroToMax: Constants.MaxHue)
         return UIColor(hue: CGFloat(hue / Constants.MaxHue), saturation: 1.0, brightness: 1.0, alpha: 1.0)
     }
     
-    private func loadTransitions() {
+    public func loadTransitions() {
         transitions.removeAll()
         
         if colors.count > 1 {
